@@ -1,3 +1,3 @@
 pub mod bitpack;
-pub mod memory;
 pub mod machine;
+pub mod memory;
