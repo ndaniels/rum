@@ -70,11 +70,12 @@ pub fn run(program: Vec<u32>) -> () {
                 let value = r[instr.rc] as u8;
                 stdout().write(&[value]).unwrap();
             }
-            Opcode::Input => match stdin().bytes().next().unwrap() {
-                Ok(value) => {
-                    r[instr.rc] = value as u32;
+            Opcode::Input => match stdin().bytes().next() {
+                Some(value) => {
+                    r[instr.rc] = value.unwrap() as u32;
                 }
-                Err(e) => panic!("Bad input: {}", e),
+                //Err(e) => panic!("Bad input: {}", e),
+                None => r[instr.rc] = !0 as u32,
             },
             Opcode::LoadProgram => {
                 if r[instr.rb] != 0 {
