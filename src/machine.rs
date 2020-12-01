@@ -118,7 +118,6 @@ pub fn boot(filename: &str) -> Vec<u32> {
 
     match f.read_to_end(&mut contents) {
         Ok(bytes) => {
-            println!("read {} bytes from {}", bytes, filename);
             // thanks to Andrew Gallant for the following
             for i in 0..contents.len() / 4 {
                 let idx = i * 4;
