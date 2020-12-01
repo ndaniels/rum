@@ -5,7 +5,7 @@ fn shl(word: u64, bits: u64) -> u64 {
     if bits == 64 {
         return 0;
     }
-    return word << bits;
+    word << bits
 }
 
 fn shr(word: u64, bits: u64) -> u64 {
@@ -13,7 +13,7 @@ fn shr(word: u64, bits: u64) -> u64 {
     if bits == 64 {
         return 0;
     }
-    return word >> bits;
+    word >> bits
 }
 
 // shift right arithmetic
@@ -22,7 +22,7 @@ fn sra(word: u64, mut bits: u64) -> i64 {
     if bits == 64 {
         bits = 63
     }
-    return (word >> bits) as i64;
+    (word >> bits) as i64
 }
 
 pub fn fitss(n: i64, width: u64) -> bool {
@@ -30,14 +30,14 @@ pub fn fitss(n: i64, width: u64) -> bool {
         return true;
     }
     let narrow = sra(shl(n as u64, 64 - width), 64 - width);
-    return narrow == n;
+    narrow == n
 }
 
 pub fn fitsu(n: u64, width: u64) -> bool {
     if width >= 64 {
         return true;
     }
-    return shr(n, width) == 0;
+    shr(n, width) == 0
 }
 
 pub fn gets(word: u64, width: u64, lsb: u64) -> i64 {
@@ -46,15 +46,13 @@ pub fn gets(word: u64, width: u64, lsb: u64) -> i64 {
     }
     let hi = lsb + width;
     assert!(hi <= 64);
-    return sra(shl(word, 64 - hi), ((64 - width) as i64).try_into().unwrap())
-        .try_into()
-        .unwrap();
+    sra(shl(word, 64 - hi), ((64 - width) as i64).try_into().unwrap())
 }
 
 pub fn getu(word: u64, width: u64, lsb: u64) -> u64 {
     let hi = lsb + width;
     assert!(hi <= 64);
-    return shr(shl(word, 64 - hi), 64 - width);
+    shr(shl(word, 64 - hi), 64 - width)
 }
 
 pub fn newu(word: u64, width: u64, lsb: u64, value: u64) -> Option<u64> {
@@ -63,16 +61,16 @@ pub fn newu(word: u64, width: u64, lsb: u64, value: u64) -> Option<u64> {
     if !fitsu(value, width) {
         return None;
     }
-    return Some(
+    Some(
         shl(shr(word, hi), hi) // high part
          | shr(shl(word, 64 - lsb), 64 - lsb) // low part
          | (value << lsb),
-    ); // new value
+    ) // new value
 }
 
 pub fn news(word: u64, width: u64, lsb: u64, value: i64) -> Option<u64> {
     if !fitss(value, width) {
         return None;
     }
-    return newu(word, width, lsb, getu(value as u64, width, 0));
+    newu(word, width, lsb, getu(value as u64, width, 0))
 }

@@ -6,7 +6,7 @@ use std::process;
 
 use crate::memory;
 
-pub fn run(program: Vec<u32>) -> () {
+pub fn run(program: Vec<u32>)  {
     // Takes an in-memory executable image
     // as specified by the UM spec, and executes it
     // It is a c.r.e. if an instruction word has
@@ -39,7 +39,7 @@ pub fn run(program: Vec<u32>) -> () {
                 segmap.store(
                     r[instr.ra].try_into().unwrap(),
                     r[instr.rb].try_into().unwrap(),
-                    r[instr.rc].try_into().unwrap(),
+                    r[instr.rc],
                 );
             }
             Opcode::Add => {
@@ -68,7 +68,7 @@ pub fn run(program: Vec<u32>) -> () {
             }
             Opcode::Output => {
                 let value = r[instr.rc] as u8;
-                stdout().write(&[value]).unwrap();
+                stdout().write_all(&[value]).unwrap();
             }
             Opcode::Input => match stdin().bytes().next() {
                 Some(value) => {
@@ -119,7 +119,7 @@ pub fn boot(filename: &str) -> Vec<u32> {
     match f.read_to_end(&mut contents) {
         Ok(bytes) => {
             println!("read {} bytes from {}", bytes, filename);
-            // thanks to jgrillo for the following
+            // thanks to Andrew Gallant for the following
             for i in 0..contents.len() / 4 {
                 let idx = i * 4;
                 let buf = &contents[idx..idx + 4];
