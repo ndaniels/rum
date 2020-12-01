@@ -117,7 +117,7 @@ pub fn boot(filename: &str) -> Vec<u32> {
     let mut program = Vec::new();
 
     match f.read_to_end(&mut contents) {
-        Ok(bytes) => {
+        Ok(_bytes) => {
             // thanks to Andrew Gallant for the following
             for i in 0..contents.len() / 4 {
                 let idx = i * 4;
